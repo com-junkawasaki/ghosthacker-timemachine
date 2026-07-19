@@ -7,9 +7,19 @@ on:
 
 jobs:
   test:
+    name: Clojure and Kotoba (JDK ${{ matrix.java }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        java: ['17', '21']
     steps:
       - uses: actions/checkout@v4
+      - name: Setup JDK ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
       - name: Install Clojure CLI
         uses: DeLaGuardo/setup-clojure@13.0
         with:
@@ -26,3 +36,15 @@ jobs:
         run: clojure -M:test
       - name: Lint (clj-kondo)
         run: clojure -M:lint
+      - name: Compile bounded inherited-server profile
+        run: |
+          mkdir -p target/kotoba
+          clojure -M:kotoba compile test/ghosthacker_timemachine/bounded_conformance.kotoba \
+            --source-path src --target js-browser --output target/kotoba/timemachine.mjs
+          clojure -M:kotoba compile test/ghosthacker_timemachine/bounded_conformance.kotoba \
+            --source-path src --target wasm32-browser --output target/kotoba/timemachine.wasm
+      - name: Execute Web and typed Wasm conformance
+        run: |
+          compiler_src="$(clojure -Spath -M:kotoba | tr ':' '\n' | grep '/compiler/' | head -1)"
+          node scripts/verify-kotoba.mjs target/kotoba/timemachine.mjs \
+            target/kotoba/timemachine.wasm "$(dirname "$compiler_src")/runtime/browser-host.mjs"

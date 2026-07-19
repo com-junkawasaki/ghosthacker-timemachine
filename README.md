@@ -81,6 +81,12 @@ clojure -M:lint
 
 `main`へのpush/PRで `.github/workflows/test.yml` が自動でテスト+lintを実行する。
 
+`src/ghosthacker_timemachine/bounded.kotoba` は、固定5深度の
+`inherited-server`だけを対象にしたcapability-freeなKotobaプロファイル。
+任意ログ、途中終了、Ghost identity roster、terminal/browser状態を同じ契約へ
+暗黙に狭めず、それらはCLJC oracleに残す。CIは同じ整数判定と最終集計を
+restricted Web JavaScriptとtyped Wasmの両方で実行する。
+
 ターミナルで遊んでみる:
 
 ```bash

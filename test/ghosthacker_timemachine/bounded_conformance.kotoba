@@ -1,0 +1,41 @@
+(ns ghosthacker-timemachine.bounded-conformance
+  (:require [ghosthacker-timemachine.bounded :as bounded])
+  (:export [main summary-check boundary-check]))
+
+(def summary-type
+  [:record :ghosthacker-timemachine/inherited-server-summary
+   [[:power :i64]
+    [:ghosts-recruited :i64]
+    [:depths-cleared :i64]
+    [:recruited-count :i64]
+    [:cleared-count :i64]
+    [:retreat-count :i64]
+    [:grade :keyword]]])
+
+(defn summary-check [] :i64
+  (let [summary (bounded/play-summary)]
+    (if (= 16 (record-get summary-type summary :power))
+      (if (= 2 (record-get summary-type summary :ghosts-recruited))
+        (if (= 5 (record-get summary-type summary :depths-cleared))
+          (if (= 2 (record-get summary-type summary :recruited-count))
+            (if (= 1 (record-get summary-type summary :cleared-count))
+              (if (= 2 (record-get summary-type summary :retreat-count))
+                (if (= :rookie (record-get summary-type summary :grade)) 42 7)
+                6)
+              5)
+            4)
+          3)
+        2)
+      1)))
+
+(defn boundary-check [power :i64 difficulty :i64 expected :keyword] :i64
+  (if (= expected (bounded/judge-encounter power difficulty)) 42 1))
+
+(defn main [] :i64
+  (if (= 42 (boundary-check 14 10 :recruited))
+    (if (= 42 (boundary-check 13 10 :cleared))
+      (if (= 42 (boundary-check 9 10 :retreat))
+        (summary-check)
+        3)
+      2)
+    1))
