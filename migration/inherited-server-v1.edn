@@ -34,7 +34,14 @@
   :wasm {:main 42 :summary-check 42 :boundary-check 42
          :artifact-sha256 "d0a1db5edf3eb1faef77295d2582e5838e6b1a4fd9f6c2b520e2d37fcf44b289"}
   :required-capabilities []
-  :hosted-ci :pending}
+  :hosted-ci
+  {:status :runner-billing-blocked
+   :run "https://github.com/com-junkawasaki/ghosthacker-timemachine/actions/runs/29696910704"
+   :jdks [17 21]
+   :jobs-started 0
+   :workflow-steps-executed 0
+   :code-failure-evidence false
+   :reverification-required true}}
  :cutover
  {:bounded-profile-authorized true
   :general-cljc-oracle-retained true}}
