@@ -1,0 +1,75 @@
+(ns ghosthacker-timemachine.bounded
+  (:export [judge-encounter play-summary]))
+
+(def state-type
+  [:record :ghosthacker-timemachine/state
+   [[:power :i64]
+    [:recruited-count :i64]
+    [:cleared-count :i64]
+    [:retreat-count :i64]
+    [:depth-index :i64]]])
+
+(def summary-type
+  [:record :ghosthacker-timemachine/inherited-server-summary
+   [[:power :i64]
+    [:ghosts-recruited :i64]
+    [:depths-cleared :i64]
+    [:recruited-count :i64]
+    [:cleared-count :i64]
+    [:retreat-count :i64]
+    [:grade :keyword]]])
+
+(defn judge-encounter [power :i64 difficulty :i64] :keyword
+  (if (< power difficulty) :retreat
+    (if (> difficulty 9223372036854775803) :cleared
+      (if (>= power (+ difficulty 4)) :recruited :cleared))))
+
+(defn difficulty-at [depth-index :i64] :i64
+  (if (= depth-index 0) 5
+    (if (= depth-index 1) 9
+      (if (= depth-index 2) 20
+        (if (= depth-index 3) 24 30)))))
+
+(defn clamp-power [power :i64] :i64
+  (if (< power 1) 1 power))
+
+(defn advance
+  [state [:alias state-type] judgment :keyword]
+  [:alias state-type]
+  (let [power (record-get state-type state :power)
+        depth-index (record-get state-type state :depth-index)
+        recruited (record-get state-type state :recruited-count)
+        cleared (record-get state-type state :cleared-count)
+        retreats (record-get state-type state :retreat-count)]
+    (if (= judgment :recruited)
+      (record state-type (+ power 5) (+ recruited 1) cleared retreats (+ depth-index 1))
+      (if (= judgment :cleared)
+        (record state-type (+ power 2) recruited (+ cleared 1) retreats (+ depth-index 1))
+        (record state-type (clamp-power (- power 3)) recruited cleared (+ retreats 1)
+          (+ depth-index 1))))))
+
+(defn play-from [state [:alias state-type]] [:alias state-type]
+  (let [depth-index (record-get state-type state :depth-index)]
+    (if (>= depth-index 5) state
+      (play-from
+        (advance state
+          (judge-encounter (record-get state-type state :power)
+            (difficulty-at depth-index)))))))
+
+(defn grade [recruited :i64] :keyword
+  (if (= recruited 5) :legend
+    (if (>= (* recruited 4) 15) :hero
+      (if (>= (* recruited 2) 5) :veteran
+        (if (>= (* recruited 4) 5) :rookie :dropout)))))
+
+(defn play-summary [] [:alias summary-type]
+  (let [state (play-from (record state-type 10 0 0 0 0))
+        recruited (record-get state-type state :recruited-count)]
+    (record summary-type
+      (record-get state-type state :power)
+      recruited
+      (record-get state-type state :depth-index)
+      recruited
+      (record-get state-type state :cleared-count)
+      (record-get state-type state :retreat-count)
+      (grade recruited))))
