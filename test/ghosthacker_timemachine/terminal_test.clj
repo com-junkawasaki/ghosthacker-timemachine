@@ -15,8 +15,9 @@
 (def ^:private play-loop! #'terminal/play-loop!)
 
 (defn- silently [thunk]
-  (binding [*out* (java.io.StringWriter.)]
-    (thunk)))
+  (let [result (atom nil)]
+    (with-out-str (reset! result (thunk)))
+    @result))
 
 (deftest read-valid-command-descend-test
   (testing "空行(enter)は:descendを返す"
