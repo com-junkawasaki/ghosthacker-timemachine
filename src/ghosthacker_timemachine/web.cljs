@@ -11,7 +11,7 @@
   once every depth is exhausted); a 'retreat' action ends the expedition
   early with the party's state so far, mirroring the terminal's q/EOF
   handling."
-  (:require [clojure.string :as str]
+  (:require [kotoba.lang.text :as str]
             [reagent.core :as r]
             [reagent.dom :as rdom]
             [ghosthacker-timemachine.core :as core]
