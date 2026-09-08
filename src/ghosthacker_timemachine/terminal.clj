@@ -13,7 +13,7 @@
   but never chooses to fail an encounter).
 
   Run: clojure -M -m ghosthacker-timemachine.terminal"
-  (:require [clojure.string :as str]
+  (:require [kotoba.lang.text :as str]
             [ghosthacker-timemachine.core :as core]
             [ghosthacker-timemachine.logs :as logs]))
 
@@ -24,7 +24,7 @@
 
 (defn- read-command! []
   (print "[enter=descend / q=retreat] > ") (flush)
-  (some-> (read-line) str/trim str/lower-case))
+  (some-> (read-line) str/trim str/lower))
 
 (defn- read-valid-command!
   "\"\"(descend)か\"q\"(retreat)が入力されるまで読み直し、:descend/:retreat
