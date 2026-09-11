@@ -12,7 +12,7 @@
   `:retreat` encounter judgment -- the party can always choose to stop,
   but never chooses to fail an encounter).
 
-  Run: clojure -M -m ghosthacker-timemachine.terminal"
+  Run: kbb -M -m ghosthacker-timemachine.terminal"
   (:require [kotoba.lang.text :as str]
             [ghosthacker-timemachine.core :as core]
             [ghosthacker-timemachine.logs :as logs]))
@@ -57,7 +57,7 @@
                      (recur next-state)))))))
 
 (defn -main
-  "Entry point for `clojure -M -m ghosthacker-timemachine.terminal`."
+  "Entry point for `kbb -M -m ghosthacker-timemachine.terminal`."
   [& _args]
   (println "GHOST HACKER: TIME MACHINE — inherited-server")
   (println "父の遺したサーバの過去ログを遡り、Ghostを仲間にする。")
