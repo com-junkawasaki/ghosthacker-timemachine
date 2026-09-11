@@ -1,8 +1,8 @@
 {:schema "kotoba-ghosthacker-timemachine-migration/v1"
  :profile :ghosthacker-timemachine/inherited-server-v1
  :legacy
- {:engine "src/ghosthacker_timemachine/core.cljc"
-  :fixture "src/ghosthacker_timemachine/logs.cljc"
+ {:engine "src/ghosthacker_timemachine/core.cljk"
+  :fixture "src/ghosthacker_timemachine/logs.cljk"
   :status :retained-general-oracle}
  :canonical
  {:engine "src/ghosthacker_timemachine/bounded.kotoba"

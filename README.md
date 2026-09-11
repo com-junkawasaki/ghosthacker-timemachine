@@ -36,7 +36,7 @@ FLOW/HARMONY/ECHOES/TUNINGがいずれもRen単独・Nei単独だったのに対
 
 ## 実装範囲
 
-`src/ghosthacker_timemachine/core.cljc` — pure、host-free。判定/state核:
+`src/ghosthacker_timemachine/core.cljk` — pure、host-free。判定/state核:
 
 - `judge-encounter` — margin(power - difficulty)を`:recruited`/`:cleared`/
   `:retreat`に判定
@@ -49,20 +49,20 @@ FLOW/HARMONY/ECHOES/TUNINGがいずれもRen単独・Nei単独だったのに対
   両方を踏まないため）
 - `play`/`play-n`/`play-summary` — 全depthをまとめて消化する統合API
 
-`src/ghosthacker_timemachine/logs.cljc` — サンプルの完結したログセット
+`src/ghosthacker_timemachine/logs.cljk` — サンプルの完結したログセット
 （`inherited-server`、5depth）。`:difficulty`の伸び方をわざと不均一にし
 （`:firewall-diary`で大きく跳ねる）、デフォルトのフルプレイで
 `:recruited`/`:cleared`/`:retreat`の3judgmentすべてが出るよう調整済み
 （testで検証: power 10 → 15(recruited) → 20(recruited) → 22(cleared) →
 19(retreat) → 16(retreat)、grade=`:rookie`）。
 
-**プレイ可能な最小プロトタイプ**として `src/ghosthacker_timemachine/terminal.clj`
+**プレイ可能な最小プロトタイプ**として `src/ghosthacker_timemachine/terminal.cljk`
 がある。FLOW/HARMONYと違い実時間のビート判定が無いため、`future`/agent
 スレッドプールを一切使わない素朴なループ。`descend`は`:power`だけで
 決まるため、terminalが実際にプレイヤーへ尋ねるのは「続けるか、ここで
 探索を切り上げるか」だけ（enter=descend、q=retreat。EOFもretreat扱い）。
 
-**ブラウザで遊べるホストアダプタ**が `src/ghosthacker_timemachine/web.cljs`
+**ブラウザで遊べるホストアダプタ**が `src/ghosthacker_timemachine/web.cljk`
 （reagent、ADR-2607100900 follow-up (b)）: TIME MACHINEもリアルタイムの
 ビート判定が無いため、ECHOES/TUNINGと同じ低複雑度側の構成（Web Audio
 不要、ボタン駆動のdescend/retreat UI）で足りる。
